@@ -1,8 +1,8 @@
 import { db } from "@/app/_lib/prisma"
 import BarbershopInfo from "./_components/barbershop-info"
-import ServiceItem from "./_components/service-item"
-import { Button } from "@/app/_components/ui/button"
 import NavButtons from "./_components/nav-buttons"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 interface BarbershopDetailsPageProps {
     params: {
@@ -11,6 +11,8 @@ interface BarbershopDetailsPageProps {
 }
 
 const BarbershopDetailsPage = async ( {params}: BarbershopDetailsPageProps ) => {
+    const session = await getServerSession(authOptions)
+
     if(!params.id) return null
     // TODO: redirecionar para página de erro caso não encontre a barbearia
 
@@ -29,7 +31,7 @@ const BarbershopDetailsPage = async ( {params}: BarbershopDetailsPageProps ) => 
     return (
         <div>
             <BarbershopInfo barbershop={barbershop} />
-            <NavButtons barbershop={barbershop} />
+            <NavButtons barbershop={barbershop} isAuthenticated={!!session?.user} />
         </div>
     )
 }

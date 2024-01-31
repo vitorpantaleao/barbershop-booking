@@ -9,11 +9,11 @@ import { cn } from "@/app/_lib/utils"
 interface NavButtonsProps {
     barbershop: {
         services: Service[]
-    } & Barbershop
-
+    } & Barbershop;
+    isAuthenticated?: boolean;
 }
 
-const NavButtons = ( {barbershop}: NavButtonsProps ) => {
+const NavButtons = ( {barbershop, isAuthenticated}: NavButtonsProps ) => {
     const [activeTab, setActiveTab] = useState<"services" | "info">("services")
 
     function changeTab(tab: "services" | "info") {
@@ -25,9 +25,10 @@ const NavButtons = ( {barbershop}: NavButtonsProps ) => {
             <div className="flex items-center gap-3">
                 <Button variant={"outline"} className={cn(activeTab === 'services' ? 'bg-primary' : '')} onClick={() => changeTab('services')}>Serviços</Button>
                 <Button variant={"outline"} className={cn(activeTab === 'info' ? 'bg-primary' : '')} onClick={() => changeTab('info')}>Informações</Button>
+                <p>{isAuthenticated}</p>
             </div>
             {activeTab === 'services' ? barbershop.services.map(service => (
-                <ServiceItem key={service.id} service={service} />
+                <ServiceItem key={service.id} service={service} isAuthenticated={isAuthenticated} />
             )) : <span className="text-sm text-gray-400">Em breve!</span>}
         </div>
     )
