@@ -35,13 +35,13 @@ const ServiceItem = ({service, isAuthenticated, barbershop}: ServiceItemProps) =
 
     useEffect(() => {
         if(!date) return
-        const refreshAvaialbleHours = async () => {
+        const refreshAvailableHours = async () => {
             const _dayBookings = await getDayBookings(barbershop.id, date)
 
             setDayBookings(_dayBookings)
         }
 
-        refreshAvaialbleHours()
+        refreshAvailableHours()
     }, [barbershop.id, date])
 
     const handleDateSelect = (date: Date | undefined) => {
