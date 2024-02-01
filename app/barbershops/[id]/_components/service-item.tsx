@@ -8,11 +8,13 @@ import { Barbershop, Service } from "@prisma/client"
 import { ptBR } from "date-fns/locale";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image"
-import { use, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { generateDayTimeList } from "../_helpers/hours";
 import { format, setHours, setMinutes } from "date-fns";
 import { saveBooking } from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner"
+import { useRouter } from "next/navigation";
 
 interface ServiceItemProps {
     barbershop: Barbershop;
@@ -21,10 +23,13 @@ interface ServiceItemProps {
 }
 
 const ServiceItem = ({service, isAuthenticated, barbershop}: ServiceItemProps) => {
+    const router = useRouter()
+
     const {data} = useSession()
     const [date, setDate] = useState<Date | undefined>(undefined)
     const [hour, setHour] = useState<string | undefined>()
     const [submitIsLoading, setSubmitIsLoading] = useState(false)
+    const [sheetIsOpen, setSheetIsOpen] = useState(false)
 
     const handleDateSelect = (date: Date | undefined) => {
         setDate(date)
@@ -57,6 +62,18 @@ const ServiceItem = ({service, isAuthenticated, barbershop}: ServiceItemProps) =
                 date: newDate,
                 userId: (data.user as any).id
             })
+
+            setSheetIsOpen(false)
+            toast("Reserva realizada com sucesso!", {
+                description: format(newDate, "'Para o dia' dd 'de' MMMM 'às' HH:mm",{locale: ptBR}),
+                action: {
+                    label: "Visualizar",
+                    onClick: () => router.push("/bookings"),
+                },
+            })
+
+            setHour(undefined)
+            setDate(undefined)
         } catch (error) {
             console.error(error)
         } finally {
@@ -80,8 +97,11 @@ const ServiceItem = ({service, isAuthenticated, barbershop}: ServiceItemProps) =
                         <p className="text-sm text-gray-400">{service.description}</p>
 
                         <div className="flex items-center justify-between mt-3">
-                            <p className="text-primary text-sm font-bold">{Intl.NumberFormat('pt-BR', { style: "currency", currency: "BRL" }).format(Number(service.price))}</p>
-                            <Sheet>
+                            <p className="text-primary text-sm font-bold">
+                                {Intl.NumberFormat('pt-BR', { style: "currency", currency: "BRL" }).format(Number(service.price))}
+                            </p>
+
+                            <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
                                 <SheetTrigger>
                                     <Button variant={"secondary"} onClick={handleBooking}>Agendar</Button>
                                 </SheetTrigger>
