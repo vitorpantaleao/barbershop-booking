@@ -28,7 +28,7 @@ const NavButtons = ( {barbershop, isAuthenticated}: NavButtonsProps ) => {
                 <p>{isAuthenticated}</p>
             </div>
             {activeTab === 'services' ? barbershop.services.map(service => (
-                <ServiceItem key={service.id} service={service} isAuthenticated={isAuthenticated} />
+                <ServiceItem key={service.id} barbershop={barbershop} service={service} isAuthenticated={isAuthenticated} />
             )) : <span className="text-sm text-gray-400">Em breve!</span>}
         </div>
     )
