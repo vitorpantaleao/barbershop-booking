@@ -81,7 +81,9 @@ const ServiceItem = ({service, isAuthenticated, barbershop}: ServiceItemProps) =
                 description: format(newDate, "'Para o dia' dd 'de' MMMM 'às' HH:mm",{locale: ptBR}),
                 action: {
                     label: "Visualizar",
-                    onClick: () => router.push("/bookings"),
+                    onClick: () => {
+                        router.push("/bookings")
+                    },
                 },
             })
 
