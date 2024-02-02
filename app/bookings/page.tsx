@@ -4,7 +4,6 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { db } from "../_lib/prisma";
 import BookingItem from "../_components/booking-item";
-import { isFuture, isPast } from "date-fns";
 
 export default async function BookingsPage() {
     const session = await getServerSession(authOptions);
@@ -46,21 +45,28 @@ export default async function BookingsPage() {
             <div className="px-5 py-6">
                 <h1 className="text-xl font-bold">Agendamentos</h1>
 
-                {confirmedBookings.length === 0 ? "" : (
-                    <h2 className="text-sm uppercase text-gray-400 font-bold mt-6 mb-3">Confirmados</h2>
+                {confirmedBookings.length > 0 && (
+                    <>
+                        <h2 className="text-sm uppercase text-gray-400 font-bold mt-6 mb-3">Confirmados</h2>
+                        <div className="space-y-3">
+                            {confirmedBookings.map((booking) => (
+                                <BookingItem key={booking.id} booking={booking} />
+                            ))}                
+                        </div>
+                    </>
                 )}
-                <div className="space-y-3">
-                    {confirmedBookings.map((booking) => (
-                        <BookingItem key={booking.id} booking={booking} />
-                    ))}                
-                </div>
 
-                <h2 className="text-sm uppercase text-gray-400 font-bold mt-6 mb-3">Finalizados</h2>
-                <div className="space-y-3">
-                    {finishedBookings.map((booking) => (
-                        <BookingItem key={booking.id} booking={booking} />
-                    ))}                
-                </div>
+                {finishedBookings.length > 0 && (
+                    <>
+                        <h2 className="text-sm uppercase text-gray-400 font-bold mt-6 mb-3">Finalizados</h2>
+                        <div className="space-y-3">
+                            {finishedBookings.map((booking) => (
+                                <BookingItem key={booking.id} booking={booking} />
+                            ))}                
+                        </div>
+                    </>
+                )}
+
             </div>
         </>
     );
