@@ -42,12 +42,24 @@ export default async function Home() {
                 <Search />
             </div>
             <div className="px-5 mt-6">
-                <h2 className="text-xs uppercase text-gray-400 font-bold mb-3">Agendamentos</h2>
-                <div className="space-y-3">
-                    {confirmedBookings.map((booking) => (
-                        <BookingItem booking={booking} key={booking.id} />
-                    ))}
-                </div>
+                {confirmedBookings.length > 0 ? (
+                    <>
+                        <h2 className="text-xs uppercase text-gray-400 font-bold mb-3">Agendamentos</h2>
+                        <div className="space-y-3">
+                            {confirmedBookings.map((booking) => (
+                                <BookingItem booking={booking} key={booking.id} />
+                            ))}
+                        </div>
+                    </>
+
+                ) : (
+                    <>
+                        <h2 className="text-xs uppercase text-gray-400 font-bold mb-3">Agendamentos</h2>
+                        <div className="p-6 bg-card rounded-lg shadow-lg">
+                            <p className="text-center text-gray-400">Você ainda não tem agendamentos</p>
+                        </div>
+                    </>
+                )}
             </div>
             <div className="mt-6">
                 <h2 className="px-5 text-xs uppercase text-gray-400 font-bold mb-3">Recomendados</h2>
