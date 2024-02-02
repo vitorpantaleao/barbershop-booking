@@ -1,3 +1,5 @@
+"use client";
+
 import { Prisma } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
@@ -7,6 +9,10 @@ import { ptBR } from "date-fns/locale";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { cancelBooking } from "../_actions/cancel-booking";
+import { toast } from "sonner";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 interface BookingItemProps {
     booking: Prisma.BookingGetPayload<{
@@ -19,6 +25,22 @@ interface BookingItemProps {
 
 const BookingItem = ({booking}: BookingItemProps) => {
     const isBookingConfirmed = isFuture(booking.date);
+
+    const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+    const handleCancelBooking = async () => {
+        setIsDeleteLoading(true);
+
+        try {
+            await cancelBooking(booking.id);
+
+            toast.success("Agendamento cancelado com sucesso!");
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsDeleteLoading(false);
+        }
+    }
 
     return (
         <div>
@@ -105,7 +127,17 @@ const BookingItem = ({booking}: BookingItemProps) => {
                             <SheetClose asChild>
                                 <Button variant={"secondary"} className="w-full font-bold">Voltar</Button>
                             </SheetClose>
-                            <Button variant={"destructive"} disabled={!isBookingConfirmed} className="w-full">Cancelar agendamento</Button>
+                            <Button 
+                                variant={"destructive"} 
+                                disabled={!isBookingConfirmed || isDeleteLoading} 
+                                className="w-full" 
+                                onClick={handleCancelBooking}
+                            >
+                                {isDeleteLoading ?? (
+                                    <Loader2 className="mr-2 h-4 animate-spin" />
+                                )}
+                                Cancelar agendamento
+                            </Button>
                         </SheetFooter>
                     </div>
                 </SheetContent>
