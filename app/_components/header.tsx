@@ -11,24 +11,26 @@ import SideMenu from "./side-menu";
 const Header = () => {
 
     return (
-        <Card>
-            <CardContent className="flex justify-between items-center py-6 px-5">
-                <Link href="/">
-                    <Image src="/logo.png" alt="logo" width={120} height={22} />
-                </Link>
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button variant="outline" size="icon" className="h-8 w-8">
-                            <MenuIcon size={18} />
-                        </Button>
-                    </SheetTrigger>
+        <header>
+            <Card>
+                <CardContent className="flex justify-between items-center py-6 px-5">
+                    <Link href="/">
+                        <Image src="/logo.png" alt="logo" width={120} height={22} />
+                    </Link>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant="outline" size="icon" className="h-8 w-8">
+                                <MenuIcon size={18} />
+                            </Button>
+                        </SheetTrigger>
 
-                    <SheetContent className="p-0">
-                        <SideMenu />
-                    </SheetContent>
-                </Sheet>
-            </CardContent>
-        </Card>
+                        <SheetContent className="p-0">
+                            <SideMenu />
+                        </SheetContent>
+                    </Sheet>
+                </CardContent>
+            </Card>
+        </header>
     )
 }
 
